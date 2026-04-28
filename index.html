@@ -2,8 +2,8 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ÖBB Abfahrten</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ÖBB Live-Abfahrten</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
@@ -21,7 +21,7 @@
       --display: 'Oswald', sans-serif;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
       background: var(--black);
@@ -29,296 +29,162 @@
       font-family: var(--display);
       min-height: 100vh;
       overflow-x: hidden;
+      line-height: 1.4;
     }
 
     /* --- HEADER --- */
     header {
       background: var(--red);
-      padding: 0 20px;
+      padding: 0 15px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 60px;
+      height: 50px;
       position: sticky;
       top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 20px rgba(226,0,26,0.4);
+      z-index: 1000;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
+    .logo { display: flex; align-items: center; gap: 8px; }
     .logo-badge {
       background: white;
       color: var(--red);
-      font-family: var(--display);
       font-weight: 700;
-      font-size: 18px;
-      letter-spacing: -0.5px;
-      padding: 4px 10px;
-      border-radius: 3px;
-    }
-
-    .logo-title {
-      font-family: var(--display);
-      font-weight: 300;
       font-size: 16px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: white;
-      opacity: 0.9;
+      padding: 2px 8px;
+      border-radius: 2px;
     }
 
     .clock {
       font-family: var(--mono);
-      font-size: 22px;
-      font-weight: 400;
+      font-size: 18px;
+      font-weight: 500;
       color: white;
-      letter-spacing: 2px;
     }
 
     /* --- MAIN --- */
     main {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 28px 16px 60px;
+      padding: 15px 10px 40px;
     }
 
     .section-label {
       font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 4px;
+      font-size: 9px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--muted);
-      margin-bottom: 16px;
-      padding-left: 4px;
+      margin-bottom: 10px;
     }
 
     /* --- STATION GRID --- */
     .stations-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 10px;
-      margin-bottom: 32px;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 8px;
+      margin-bottom: 20px;
     }
 
     .station-btn {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 16px 20px;
+      border-radius: 8px;
+      padding: 12px;
       cursor: pointer;
       display: flex;
-      align-items: center;
-      gap: 14px;
-      transition: all 0.18s ease;
+      flex-direction: column;
+      gap: 4px;
+      transition: all 0.15s ease;
       text-align: left;
-      position: relative;
-      overflow: hidden;
     }
 
-    .station-btn::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
-      background: var(--red);
-      transform: scaleY(0);
-      transition: transform 0.18s ease;
-    }
-
-    .station-btn:hover,
     .station-btn.active {
       border-color: var(--red);
-      background: #252525;
-      transform: translateX(2px);
-    }
-
-    .station-btn:hover::before,
-    .station-btn.active::before {
-      transform: scaleY(1);
-    }
-
-    .station-btn.active {
-      background: #221010;
-    }
-
-    .station-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--red);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 18px;
-    }
-
-    .station-info {
-      flex: 1;
-      min-width: 0;
+      background: #2a1515;
+      box-shadow: inset 0 0 10px rgba(226,0,26,0.2);
     }
 
     .station-name {
-      font-family: var(--display);
       font-weight: 600;
-      font-size: 15px;
-      letter-spacing: 0.5px;
+      font-size: 14px;
       color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .station-eva {
       font-family: var(--mono);
-      font-size: 10px;
+      font-size: 9px;
       color: var(--muted);
-      margin-top: 2px;
-      letter-spacing: 1px;
     }
 
-    .station-arrow {
-      color: var(--muted);
-      font-size: 14px;
-      transition: color 0.18s;
-    }
-
-    .station-btn:hover .station-arrow,
-    .station-btn.active .station-arrow {
-      color: var(--red);
-    }
-
-    /* --- FRAME WRAPPER --- */
+    /* --- FRAME AREA --- */
     .frame-wrapper {
       display: none;
-      animation: fadeIn 0.3s ease;
+      margin-top: 5px;
     }
 
-    .frame-wrapper.visible {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    .frame-wrapper.visible { display: block; }
 
     .frame-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
+      background: var(--panel);
+      padding: 8px;
+      border-radius: 6px;
     }
 
-    .frame-station-name {
-      font-family: var(--display);
-      font-weight: 700;
-      font-size: 22px;
-      letter-spacing: 1px;
-      color: var(--text);
-    }
-
-    .frame-station-name span {
-      color: var(--red);
-    }
+    .frame-station-name { font-size: 18px; font-weight: 600; }
+    .frame-station-name span { color: var(--red); }
 
     .open-btn {
       font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--muted);
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 6px 14px;
-      cursor: pointer;
+      font-size: 10px;
+      color: var(--accent);
       text-decoration: none;
-      transition: all 0.18s;
-      white-space: nowrap;
+      border: 1px solid var(--accent);
+      padding: 4px 8px;
+      border-radius: 4px;
     }
 
-    .open-btn:hover {
-      color: var(--text);
-      border-color: var(--red);
-      background: #221010;
-    }
-
+    /* Iframe Container mit Mobile-Zoom */
     .iframe-container {
       border: 1px solid var(--border);
       border-radius: 8px;
       overflow: hidden;
-      background: white;
+      background: #fff;
+      height: 70vh; /* Nutzt mehr Platz auf dem Handy */
       position: relative;
+      -webkit-overflow-scrolling: touch;
     }
 
     .iframe-container iframe {
       width: 100%;
-      height: 640px;
+      height: 100%;
       border: none;
-      display: block;
     }
 
-    /* Overlay hint for iframe interaction on mobile */
-    .iframe-hint {
-      display: none;
-      text-align: center;
-      padding: 10px;
-      background: #111;
-      border-top: 1px solid var(--border);
+    /* Optimierung für sehr schmale Bildschirme */
+    @media (max-width: 600px) {
+      .stations-grid { grid-template-columns: 1fr 1fr; }
+      
+      /* Trick: Skaliere den Iframe-Inhalt, damit er auf Mobile besser passt */
+      .iframe-container iframe {
+          width: 125%;
+          height: 125%;
+          transform: scale(0.8);
+          transform-origin: 0 0;
+      }
     }
 
-    .iframe-hint a {
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--accent);
-      text-decoration: none;
-      letter-spacing: 1px;
-    }
-
-    /* --- FOOTER --- */
     footer {
       text-align: center;
       padding: 20px;
       font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 2px;
+      font-size: 9px;
       color: var(--muted);
-      border-top: 1px solid var(--border);
-      margin-top: 40px;
-    }
-
-    /* --- RESPONSIVE --- */
-    @media (max-width: 600px) {
-      header { height: 54px; }
-      .logo-title { display: none; }
-      .clock { font-size: 18px; }
-
-      .stations-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-
-      .station-btn {
-        padding: 12px 14px;
-        gap: 10px;
-      }
-
-      .station-icon { width: 30px; height: 30px; font-size: 14px; }
-      .station-name { font-size: 13px; }
-      .station-arrow { display: none; }
-
-      .frame-station-name { font-size: 17px; }
-
-      .iframe-container iframe { height: 75vh; }
-      .iframe-hint { display: block; }
-
-      main { padding: 20px 12px 40px; }
     }
   </style>
 </head>
@@ -327,121 +193,87 @@
 <header>
   <div class="logo">
     <div class="logo-badge">ÖBB</div>
-    <div class="logo-title">Abfahrtszeiten</div>
   </div>
   <div class="clock" id="clock">--:--:--</div>
 </header>
 
 <main>
-  <p class="section-label">Bahnhof auswählen</p>
+  <p class="section-label">Station wählen</p>
 
   <div class="stations-grid">
-    <button class="station-btn" data-eva="8100349" data-name="Wien Praterstern" onclick="selectStation(this)">
-      <div class="station-icon">🚉</div>
-      <div class="station-info">
-        <div class="station-name">Wien Praterstern</div>
-        <div class="station-eva">EVA · 8100349</div>
-      </div>
-      <div class="station-arrow">›</div>
+    <button class="station-btn" data-id="8102801" data-name="Wien Praterstern" onclick="selectStation(this)">
+      <span class="station-name">Praterstern</span>
+      <span class="station-eva">ID 8102801</span>
     </button>
 
-    <button class="station-btn" data-eva="8100003" data-name="Wien Westbahnhof" onclick="selectStation(this)">
-      <div class="station-icon">🚂</div>
-      <div class="station-info">
-        <div class="station-name">Wien Westbahnhof</div>
-        <div class="station-eva">EVA · 8100003</div>
-      </div>
-      <div class="station-arrow">›</div>
+    <button class="station-btn" data-id="8101003" data-name="Wien Westbahnhof" onclick="selectStation(this)">
+      <span class="station-name">Westbahnhof</span>
+      <span class="station-eva">ID 8101003</span>
     </button>
 
-    <button class="station-btn" data-eva="8103000" data-name="Wien Hauptbahnhof" onclick="selectStation(this)">
-      <div class="station-icon">🏛️</div>
-      <div class="station-info">
-        <div class="station-name">Wien Hbf</div>
-        <div class="station-eva">EVA · 8103000</div>
-      </div>
-      <div class="station-arrow">›</div>
+    <button class="station-btn" data-id="8101003" data-name="Wien Hauptbahnhof" onclick="selectStation(this)">
+      <span class="station-name">Wien Hbf</span>
+      <span class="station-eva">ID 8101003</span>
     </button>
 
-    <button class="station-btn" data-eva="8101114" data-name="Salzburg Hauptbahnhof" onclick="selectStation(this)">
-      <div class="station-icon">🏔️</div>
-      <div class="station-info">
-        <div class="station-name">Salzburg Hbf</div>
-        <div class="station-eva">EVA · 8101114</div>
-      </div>
-      <div class="station-arrow">›</div>
+    <button class="station-btn" data-id="8101114" data-name="Salzburg Hauptbahnhof" onclick="selectStation(this)">
+      <span class="station-name">Salzburg Hbf</span>
+      <span class="station-eva">ID 8101114</span>
     </button>
 
-    <button class="station-btn" data-eva="8100014" data-name="Wels Hauptbahnhof" onclick="selectStation(this)">
-      <div class="station-icon">🚆</div>
-      <div class="station-info">
-        <div class="station-name">Wels Hbf</div>
-        <div class="station-eva">EVA · 8100014</div>
-      </div>
-      <div class="station-arrow">›</div>
+    <button class="station-btn" data-id="8101081" data-name="Wels Hauptbahnhof" onclick="selectStation(this)">
+      <span class="station-name">Wels Hbf</span>
+      <span class="station-eva">ID 8101081</span>
     </button>
   </div>
 
   <div class="frame-wrapper" id="frameWrapper">
     <div class="frame-header">
       <div class="frame-station-name" id="frameTitle">—</div>
-      <a class="open-btn" id="openBtn" href="#" target="_blank">↗ ÖBB öffnen</a>
+      <a class="open-btn" id="openBtn" href="#" target="_blank">EXTERN ↗</a>
     </div>
     <div class="iframe-container">
-      <iframe id="departureFrame" src="" title="ÖBB Abfahrtszeiten" allowfullscreen></iframe>
-      <div class="iframe-hint">
-        <a id="mobileLink" href="#" target="_blank">📱 In ÖBB-App öffnen →</a>
-      </div>
+      <iframe id="departureFrame" src="" title="ÖBB Abfahrten"></iframe>
     </div>
   </div>
 </main>
 
-<footer>ÖBB ECHTZEIT-ABFAHRTEN · DATEN VON MEINE.ÖBB.AT</footer>
+<footer>DATEN: MEINE.OEBB.AT</footer>
 
 <script>
-  // Clock
   function updateClock() {
     const now = new Date();
-    const h = String(now.getHours()).padStart(2,'0');
-    const m = String(now.getMinutes()).padStart(2,'0');
-    const s = String(now.getSeconds()).padStart(2,'0');
-    document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+    document.getElementById('clock').textContent = now.toLocaleTimeString('de-DE', { hour12: false });
   }
-  updateClock();
   setInterval(updateClock, 1000);
+  updateClock();
 
-  // Station selection
   function selectStation(btn) {
-    // Deactivate all
     document.querySelectorAll('.station-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 
-    const eva = btn.dataset.eva;
+    const id = btn.dataset.id;
     const name = btn.dataset.name;
-    const url = `https://meine.oebb.at/abfahrtankunft/departure?evaNr=${eva}`;
+    // Neues URL Schema
+    const url = `https://meine.oebb.at/webdisplay/?stationId=${id}&contentType=departure&staticLayout=true&page=1&offset=0&ignoreIncident=false&expandAll=false`;
 
-    document.getElementById('frameTitle').innerHTML =
-      name.replace(/(\s)(Hbf|Westbahnhof|Praterstern)/, ' <span>$2</span>');
-
+    document.getElementById('frameTitle').innerHTML = name.replace(/(Hbf|Westbahnhof|Praterstern)/, '<span>$1</span>');
     document.getElementById('openBtn').href = url;
-    document.getElementById('mobileLink').href = url;
-    document.getElementById('departureFrame').src = url;
+    
+    const frame = document.getElementById('departureFrame');
+    frame.src = url;
 
     const wrapper = document.getElementById('frameWrapper');
-    wrapper.classList.remove('visible');
-    // Force reflow for animation replay
-    void wrapper.offsetWidth;
     wrapper.classList.add('visible');
 
-    // Smooth scroll to frame on mobile
+    // Scroll-Assist für Mobile
     if (window.innerWidth < 600) {
       setTimeout(() => {
         wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
+      }, 300);
     }
   }
 
-  // Auto-select first station on load
   window.addEventListener('load', () => {
     const first = document.querySelector('.station-btn');
     if (first) selectStation(first);
